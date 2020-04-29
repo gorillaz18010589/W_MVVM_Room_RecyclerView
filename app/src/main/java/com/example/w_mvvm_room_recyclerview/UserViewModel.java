@@ -1,6 +1,7 @@
 package com.example.w_mvvm_room_recyclerview;
 //A.繼承ViewModelProvider.AndroidViewModelFactory
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,6 +21,7 @@ public class UserViewModel extends AndroidViewModel {
         //A.建構時拿到userRepository物件,並且取得裡面allUsers的LiveData
         userRepository = new UserRepository(application);
         allUsers = userRepository.getAllUsers();
+        Log.v("hank","UserViewModel =>" + "UserViewModel()");
     }
 
 

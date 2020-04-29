@@ -43,10 +43,6 @@ public class User {
     private int priority;
 
 
-    //D.排除此屬性,讓他不要蘭變成欄位
-    @Ignore
-//    Bitmap bitmap;  //@Ignore:可以排除此屬性,讓屬性部會變成欄位
-
 
     public User(String title, String description, int priority) {
         this.title = title;

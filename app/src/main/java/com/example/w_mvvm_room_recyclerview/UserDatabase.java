@@ -2,6 +2,7 @@ package com.example.w_mvvm_room_recyclerview;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -21,7 +22,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 //2、在繼承的類前使用註解@Database。
 @Database(entities = {User.class}, version = 1) //@Database(1.entities:要加入到資料庫的bean, 2.version:版本數)\
 public abstract class UserDatabase extends RoomDatabase {//1、創建繼承RoomDatabase的抽像類。
-    public static UserDatabase instance;
+    private static UserDatabase instance;
+    private static String TAG = "hank";
+    private static String TAG_MSG ="UserDatabase";
 
     //4.宣告抽象類別UserDao,讓UserRepository玩
     public abstract UserDao userDao();
@@ -29,12 +32,17 @@ public abstract class UserDatabase extends RoomDatabase {//1、創建繼承RoomD
     //5.創建UserDatabase物件實體
     public static synchronized UserDatabase getInstance(Context context) {
         if (instance == null) {
-            Room.databaseBuilder(context.getApplicationContext(), UserDatabase.class, "user_database")
-                    .fallbackToDestructiveMigration()
+            Log.v(TAG, TAG_MSG + "getInstance()");
+            instance = Room
+                    .databaseBuilder(context.getApplicationContext(), UserDatabase.class, "user_database")
+                    .fallbackToDestructiveMigration()//如果未找到舊有的db,table就允許破壞性的重創Table
                     //9.加入自己寫的callback
-                    .addCallback(roomCallbcak)
-                    .build();
+                    .addCallback(roomCallbcak)//新增一個回呼事件(RoomDatabase.的CallBack事件)
+                    .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING)
+                    .build();//創建一個db並且序列化
+
         }
+        Log.v(TAG, TAG_MSG + "成功創建DB:" + instance.toString());
         return instance;
     }
 
@@ -43,6 +51,7 @@ public abstract class UserDatabase extends RoomDatabase {//1、創建繼承RoomD
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+            Log.v(TAG,TAG_MSG +"onCreate()");
             //8.創建時,PopulateDbAsyncTask的自動產生資料
             new PopulateDbAsyncTask(instance).execute();
         }
@@ -54,14 +63,17 @@ public abstract class UserDatabase extends RoomDatabase {//1、創建繼承RoomD
 
         private PopulateDbAsyncTask(UserDatabase userDatabase){
             userDao = userDatabase.userDao();
-            userDao.insert(new User("1","自動產生1",1));
-            userDao.insert(new User("1","自動產生2",1));
-            userDao.insert(new User("1","自動產生3",1));
-            userDao.insert(new User("1","自動產生4",1));
+
+            Log.v(TAG,TAG_MSG +"PopulateDbAsyncTask()");
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
+            userDao.insert(new User("1","自動產生1",1));
+            userDao.insert(new User("1","自動產生2",1));
+            userDao.insert(new User("1","自動產生3",1));
+            userDao.insert(new User("1","自動產生4",1));
+            Log.v(TAG,TAG_MSG +"doInBackground()");
             return null;
         }
     }

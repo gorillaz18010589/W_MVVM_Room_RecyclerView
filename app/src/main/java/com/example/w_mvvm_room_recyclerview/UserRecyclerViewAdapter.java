@@ -9,16 +9,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerViewAdapter.UserViewHolder> {
-    private List<User> mData;
-    private Context mContext;
+    private List<User> mData = new ArrayList<>();
+
+
+
+
 
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.user_item,parent);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item,parent,false);
         UserViewHolder userViewHolder = new UserViewHolder(view);
         return userViewHolder;
     }

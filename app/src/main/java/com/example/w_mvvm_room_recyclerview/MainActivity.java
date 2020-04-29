@@ -5,8 +5,8 @@ package com.example.w_mvvm_room_recyclerview;
 //2.建立@Entity表:設定資料庫欄位
 //3.建立@Dao interface:定義語法操作
 //4.建立@Database 繼承RoomDatabase :創建數據庫,裡面包含DAO,Entity
-//5.UserRepository
-//6.ViewModel
+//5.創建UserRepository區,裡面放LiveData:保存數據,可以備感知,當數據變動會呼叫,減少內存外洩
+//6.ViewModel:好處當選轉時Acitivty restart,ViewModel仍然存活著
 //7.回到MainActivity userViewModel物件實體化,取得LiveData建立Obseve
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // 1.init ViewModel
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 
         //2.init RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recy);
@@ -42,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(userRecyclerViewAdapter);
 
 
+        //1.init ViewModel
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         userViewModel.getAllUsers().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {

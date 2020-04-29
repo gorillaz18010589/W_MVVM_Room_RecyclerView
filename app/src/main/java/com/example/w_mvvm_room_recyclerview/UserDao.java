@@ -18,10 +18,11 @@ import java.util.List;
  * */
 
 /*
- * @Dao:
+ * @Dao:DAO化,可以適用SQL語法,並且自動編譯檢查是否正確
+ * @Insert:會將所有的參數加入到DB
  * @Update:
- * @Delete:
- * @Query
+ * @Delete:刪除指定的資料
+ * @Query:每個查詢都會再編譯期間,判斷是否正確
  * */
 @Dao
 public interface UserDao {
