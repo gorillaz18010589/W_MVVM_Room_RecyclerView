@@ -1,2 +1,4 @@
 rootProject.name='W_MVVM_Room_RecyclerView'
 include ':app'
+include ':room'
+include ':app:mylibrary'

@@ -63,4 +63,10 @@ dependencies {
     //ViewModelProviders
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha03'
 
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
+
 }

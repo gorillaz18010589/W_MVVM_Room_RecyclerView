@@ -19,11 +19,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.w_mvvm_room_recyclerview.Login.LoginDao;
+import com.example.w_mvvm_room_recyclerview.Login.LoginDataBase;
+import com.example.w_mvvm_room_recyclerview.Login.LoginResult;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private String TAG ="hank";
+    private String url ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        loginApi();
 
         //2.init RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recy);
@@ -52,5 +64,36 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+    }
+
+    private void loginApi() {
+        Map<String,String> map = new HashMap<>();
+        map.put("module", "app");
+        map.put("action", "login");
+        map.put("app", "login");
+        map.put("phone", "13232236359");
+        map.put("password", "aaaa1111");
+        map.put("cart_id", "");
+        MyOkHttpApi.instance().doPostFormBody(url, map, new MyOkHttpApi.OkHttpCallBack() {
+            @Override
+            public void onFailure(IOException e) {
+
+            }
+
+            @Override
+            public void onSuccess(Response response) {
+                if(response.isSuccessful()){
+                    try {
+                        String body = response.body().string();
+                        Log.v(TAG,"MainActivity:isSuccessful:" + "/body:" + body);
+                        Gson gson = new Gson();
+                        LoginResult loginResult =  gson.fromJson(body, LoginResult.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 }

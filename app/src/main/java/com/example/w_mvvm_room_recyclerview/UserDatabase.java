@@ -9,6 +9,15 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.example.w_mvvm_room_recyclerview.Login.LoginResult;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.Response;
 //創建Room database包括三個步驟：
 // 1、創建繼承RoomDatabase的抽像類。
 // 2、在繼承的類前使用註解@Database。
@@ -26,10 +35,13 @@ public abstract class UserDatabase extends RoomDatabase {//1、創建繼承RoomD
     private static String TAG = "hank";
     private static String TAG_MSG ="UserDatabase";
 
+
     //4.宣告抽象類別UserDao,讓UserRepository玩
     public abstract UserDao userDao();
 
-    //5.創建UserDatabase物件實體
+
+    /* 5.創建UserDatabase物件實體
+     * @param:1.Context context => 要用DB的的Activity    * */
     public static synchronized UserDatabase getInstance(Context context) {
         if (instance == null) {
             Log.v(TAG, TAG_MSG + "getInstance()");
@@ -38,7 +50,6 @@ public abstract class UserDatabase extends RoomDatabase {//1、創建繼承RoomD
                     .fallbackToDestructiveMigration()//如果未找到舊有的db,table就允許破壞性的重創Table
                     //9.加入自己寫的callback
                     .addCallback(roomCallbcak)//新增一個回呼事件(RoomDatabase.的CallBack事件)
-                    .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING)
                     .build();//創建一個db並且序列化
 
         }
@@ -77,4 +88,8 @@ public abstract class UserDatabase extends RoomDatabase {//1、創建繼承RoomD
             return null;
         }
     }
+
+
+
+
 }
